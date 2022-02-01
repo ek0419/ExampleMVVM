@@ -1,0 +1,90 @@
+plugins {
+    id 'com.android.application'
+    //dager
+    id 'kotlin-android'
+    id 'kotlin-kapt' //atraves de las anotaciones que hacemos en hilt, nos auto genera el codigo por atras
+    id "dagger.hilt.android.plugin"
+
+}
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.example.examplemvvm"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+
+        kapt {
+            javacOptions {
+                // These options are normally set automatically via the Hilt Gradle plugin, but we
+                // set them manually to workaround a bug in the Kotlin 1.5.20
+                option("-Adagger.fastInit=ENABLED")
+                option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled true
+            shrinkResources true //reduccion de recursos
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures{
+        viewBinding = true
+    }
+
+}
+
+
+dependencies {
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+    //liveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
+    //Fragmen para implimentar mas facil el viewModel en elfragmetno
+    implementation "androidx.fragment:fragment-ktx:1.3.6"
+    //Activity para implimentar mas facil el viewModel en Activity
+    implementation "androidx.activity:activity-ktx:1.3.1"
+    //retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    //geson
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    //corrutinas
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
+    //controlador corrutinas
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    //dagger hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
